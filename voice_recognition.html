@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Intel(R) RealSense(TM) SDK Web Sample</title>
-
-    <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="promise-1.0.0.min.js"></script>
-    <script type="text/javascript" src="realsense-3.0.js"></script>
-    <script type="text/javascript" src="realsenseinfo-3.0.js"></script>
+    <title>Intel(R) RealSense(TM) SDK</title>
+    <link rel="stylesheet" href="css/bootstrap.css" type='text/css'>
+    <link rel="stylesheet" href="css/custom.css" type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Bree+Serif|Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/promise-1.0.0.min.js"></script>
+    <script type="text/javascript" src="js/realsense-3.0.js"></script>
+    <script type="text/javascript" src="js/realsenseinfo-3.0.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var session;
@@ -89,7 +92,16 @@
 
             function OnRecognition(result) {
                 var res = result.data.scores[0];
-                if (res.confidence !== 'undefined' && res.confidence != 0) res.sentence += ' (' + res.confidence + '%)';
+                //$('#out').append("<b>RESULT</b>"+res.sentence);
+                if (res.confidence !== 'undefined' && res.confidence >= 0) { 
+                    if (res.sentence == "Left") {
+                        $('#out').append("Word has been recognized "+res.sentence+'<br>');
+                        $('#start1').css("padding-left", "20px");
+                    } else {
+                        $('#out').append("Word not recognized "+'<br>');
+                    }
+                    //res.sentence += ' (' + res.confidence + '%)';
+                }
                 $('#recognition').append(res.sentence + '<br>');
                 var obj = document.getElementById("recognition");
                 obj.scrollTop = obj.scrollHeight;
@@ -110,28 +122,28 @@
 
 <body>
     <div id="wrapper">
-        <div id="container">
+        <div class="container" style="padding-left:40px;">
+            <div class="content row">
+                <h1>RealSense Application using Voice Recognition</h1>
 
-            <h1>Intel(R) RealSense(TM) SDK Voice Recognition Web Sample</h1>
-
-            <div id="info"></div>
-            <br>
-            Mode
-            <select id="mode">
-                <option value=0>Dictation</option>
-                <option value=1>Command-control</option>
-            </select>
-            <br>
-            <textarea id="commands" cols="40" rows="5" style="display:none"">left
-right</textarea>
-            <br>
-            <button id="Start">Start</button>
-            <button id="Stop" disabled="disabled">Stop</button>
-            <br>
-
-            <br><b>Status:</b><div id="status"></div>
-            <br><b>Recognition result:</b><div id="recognition" style="height: 150px; border:1px solid #000000; overflow: scroll; overflow-x: hidden"></div>
-            <br><b>Alerts:</b><div id="alerts" style="height: 150px; border:1px solid #000000; overflow: scroll; overflow-x: hidden"></div>
+                <div id="info"></div>
+                <br>
+                Mode
+                <select id="mode">
+                    <option value=0>Dictation</option>
+                    <option value=1>Command-control</option>
+                </select>
+                <br>
+                <br>
+                <button id="Start">Start</button>
+                <button id="Stop" disabled="disabled">Stop</button>
+                <br>
+                <div id="out"> </div>
+                <br><b>Status:</b><div id="status"></div>
+                <div id='start1'><img src="images/bg.jpg"> </div>
+                <br><b>Recognition result:</b><div id="recognition" style="height: 150px; border:1px solid #000000; overflow: scroll; overflow-x: hidden"></div>
+                <br><b>Alerts:</b><div id="alerts" style="height: 150px; border:1px solid #000000; overflow: scroll; overflow-x: hidden"></div>
+            </div>
         </div>
     </div>
 </body>

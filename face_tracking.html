@@ -3,16 +3,18 @@
 <head>
     <title>Intel RealSense</title>
 
-    <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="promise-1.0.0.min.js"></script>
-    <script type="text/javascript" src="realsense-3.0.js"></script>
-    <script type="text/javascript" src="realsenseinfo-3.0.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/promise-1.0.0.min.js"></script>
+    <script type="text/javascript" src="js/realsense-3.0.js"></script>
+    <script type="text/javascript" src="js/realsenseinfo-3.0.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var sense;
             var imageSize;
             var faceConfiguration;
-
+            var session;
+            var speech_rec;
+            var mode;
             // check platform compatibility
             RealSenseInfo(['face3d'], function (info) {
                 if (info.IsReady == true) {
@@ -22,7 +24,7 @@
                 } else {
                     status('Platform not supported: ' + info.responseText);
                     if (info.IsPlatformSupported != true) {
-                        $('#info').append('<b>Intel® RealSense™ 3D camera not found</b>');
+                        $('#info').append('<b>IntelÂ® RealSenseâ„¢ 3D camera not found</b>');
                     } else if (info.IsBrowserSupported != true) {
                         $('#info').append('<b>Please update your browser to latest version</b>');
                     } else {

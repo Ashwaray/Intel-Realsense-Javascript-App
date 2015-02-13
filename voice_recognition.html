@@ -15,6 +15,10 @@
             var session;
             var speech_rec;
             var mode;
+            var mode1;
+            var sense;
+            var imageSize;
+            var faceConfiguration;
 
             // check platform compatibility
             RealSenseInfo(['nuance'], function (info) {
@@ -78,7 +82,50 @@
                     status('StartRec failed: ' + JSON.stringify(error));
                     document.getElementById("Start").disabled = false;
                 });
+
+                /*PXCMSenseManager_CreateInstance().then(function (result1) {
+                    sense = result1;
+                    return sense.EnableFace(onFaceData);
+                }).then(function (result1) {
+                    return result1.CreateActiveConfiguration();
+                }).then(function (result1) {
+                    faceConfiguration = result1;
+                    faceConfiguration.configs.detection.isEnabled = document.getElementById("detection").checked;
+                    faceConfiguration.configs.landmarks.isEnabled = document.getElementById("landmarks").checked;
+                    faceConfiguration.configs.pose.isEnabled = document.getElementById("pose").checked;
+                    faceConfiguration.configs.expressionProperties.isEnabled = document.getElementById("expressions").checked;
+                    var selects = document.getElementById("mode1");
+                    var mode1 = Number(selects.options[selects.selectedIndex].value);
+                    return faceConfiguration.SetTrackingMode(mode1);
+                }).then(function (result1) {
+                    return faceConfiguration.ApplyChanges();
+                }).then(function (result1) {
+                    status1('Init started');
+                    return sense.Init(null, onStatus);
+                }).then(function (result1) {
+                    return sense.QueryCaptureManager();
+                }).then(function (capture) {
+                    return capture.QueryImageSize(pxcmConst.PXCMCapture.STREAM_TYPE_COLOR);
+                }).then(function (result1) {
+                    imageSize = result1.size;
+                    return sense.StreamFrames();
+                }).then(function (result1) {
+                    status1('Streaming ' + imageSize.width + 'x' + imageSize.height);
+                    document.getElementById("Stop").disabled = false;
+                }).catch(function (error) {
+                    status1('Init failed: ' + JSON.stringify(error));
+                    document.getElementById("Start").disabled = false;
+                });*/
             });
+
+            function clear() {
+                $('#pose_status').text('');
+                $('#expressions_status').text('');
+                document.getElementById("Start").disabled = false;
+                var canvas = document.getElementById('myCanvas');
+                var context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+            }
 
             $('#Stop').click(function () {
                 document.getElementById("Stop").disabled = true;
@@ -88,15 +135,23 @@
                     $('#recognition').text('');
                     document.getElementById("Start").disabled = false;
                 });
+                sense.Close().then(function (result1) {
+                    status('Stopped');
+                    clear();
+                });
             });
 
             function OnRecognition(result) {
                 var res = result.data.scores[0];
+                var r = res.sentence;
+                var rec = r.split(' ');
+                //alert(rec[1]);
                 //$('#out').append("<b>RESULT</b>"+res.sentence);
                 if (res.confidence !== 'undefined' && res.confidence >= 0) { 
                     if (res.sentence == "Left") {
-                        $('#out').append("Word has been recognized "+res.sentence+'<br>');
+                        $('#out').append("Word has been recognized "+res.sentence+' '+rec[1]+'<br>');
                         $('#start1').css("padding-left", "20px");
+                        //alert(rec);
                     } else {
                         $('#out').append("Word not recognized "+'<br>');
                     }
@@ -116,6 +171,10 @@
             function status(msg) {
                 $('#status').text(msg);
             }
+            function status1(msg) {
+                $('#status1').text(msg);
+            }
+
         });
     </script>
 </head>
@@ -128,6 +187,9 @@
 
                 <div id="info"></div>
                 <br>
+                <div id="info1"></div>
+                <br>
+                <br>
                 Mode
                 <select id="mode">
                     <option value=0>Dictation</option>
@@ -135,12 +197,30 @@
                 </select>
                 <br>
                 <br>
+                <select id="mode1">
+                    <option value=0>2D</option>
+                    <option value=1 selected="selected">3D</option>
+                </select>
+                <br>
+                <textarea id="commands" cols="40" rows="5" style="display:none">left right</textarea>
+                <br>
+                Mode
+                <input id="detection" type="checkbox" checked="checked" />Detection
+                <input id="landmarks" type="checkbox" checked="checked" />Landmarks
+                <input id="pose" type="checkbox" />Pose
+                <input id="expressions" type="checkbox" />Expressions
+                <br>
                 <button id="Start">Start</button>
                 <button id="Stop" disabled="disabled">Stop</button>
                 <br>
                 <div id="out"> </div>
                 <br><b>Status:</b><div id="status"></div>
+                <br><b>Status Face:</b><div id="status1"></div><br><br>
                 <div id='start1'><img src="images/bg.jpg"> </div>
+                <canvas id="myCanvas" style="border:1px solid #000000;"></canvas>
+                <div id="pose_status"></div>
+                <div id="expressions_status"></div>
+                <br>
                 <br><b>Recognition result:</b><div id="recognition" style="height: 150px; border:1px solid #000000; overflow: scroll; overflow-x: hidden"></div>
                 <br><b>Alerts:</b><div id="alerts" style="height: 150px; border:1px solid #000000; overflow: scroll; overflow-x: hidden"></div>
             </div>

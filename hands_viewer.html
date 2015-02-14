@@ -14,7 +14,7 @@
             var imageSize;
             var handModule;
             var handConfiguration;
-            var menuOrder=0;//My Data
+            var menuOrder=1;//My Data
             var gestureStatusStr;///My Data
             // check platform compatibility
             RealSenseInfo(['hand'], function (info) {
@@ -143,8 +143,8 @@
                 for (g = 0; g < data.gestures.length; g++) {
                     $('#gestures_status').text('Gesture: ' + JSON.stringify(data.gestures[g]));
                     gestureStatusStr = JSON.stringify(data.gestures[g].name);//My Data
+                    activityMenu();
                 }
-                activityMenu();
                 //alert(gestureStatusStr);
             }
 
@@ -196,11 +196,21 @@
             }
 
             function activityMenu(){
-                var elem = $('#home');
                 var p1elem = $('#p1');
                  p1elem.text(gestureStatusStr);
+
+                if(gestureStatusStr=='"v_sign"' && menuOrder>2){
+                    menuOrder--;
+                } else if (gestureStatusStr=='"thumb_down"' && menuOrder<5) {
+                    menuOrder++;
+                }
+
+                var elem = $('#home' + menuOrder.toString());
+
                 if(gestureStatusStr=='"spreadfingers"'){
                     expandMe(elem);
+                } else {
+                    collapseMe(elem);
                 }
             }
         });
@@ -233,7 +243,7 @@
         
 
     <div style="float: left;padding: 0 0 0 236px;">
-            <div class="item">
+            <div class="item" id="home5">
                 <a class="link icon_mail"></a>
                 <div class="item_content">
                     <h2>Contact us</h2>
@@ -244,7 +254,7 @@
                     </p>
                 </div>
             </div>
-            <div class="item">
+            <div class="item" id="home4">
                 <a class="link icon_help"></a>
                 <div class="item_content">
                     <h2>Help</h2>
@@ -255,7 +265,7 @@
                     </p>
                 </div>
             </div>
-            <div class="item">
+            <div class="item" id="home3">
                 <a class="link icon_find"></a>
                 <div class="item_content">
                     <h2>Search</h2>
@@ -265,7 +275,7 @@
                     </p>
                 </div>
             </div>
-            <div class="item">
+            <div class="item" id="home2">
                 <a class="link icon_photos"></a>
                 <div class="item_content">
                     <h2>Image Gallery</h2>
@@ -276,7 +286,7 @@
                     </p>
                 </div>
             </div>
-            <div class="item"  id="home">
+            <div class="item"  id="home1">
                 <a class="link icon_home"></a>
                 <div class="item_content">
                     <h2>Start from here</h2>

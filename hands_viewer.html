@@ -16,6 +16,7 @@
             var handConfiguration;
             var menuOrder=1;//My Data
             var gestureStatusStr;///My Data
+            var flag = 0;
             // check platform compatibility
             RealSenseInfo(['hand'], function (info) {
                 if (info.IsReady == true) {
@@ -94,12 +95,21 @@
                 });
             });
 
+            function sleep(milliseconds) {
+              var start = new Date().getTime();
+              for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                  break;
+                }
+              }
+            }
+
             function onHandData(mid, module, data) {
                 var canvas = document.getElementById('myCanvas');
                 var context = canvas.getContext('2d');
                 var radius = 5;
                 var scale = 1;
-
+                flag = !flag;
                 canvas.width = imageSize.width;
                 canvas.height = imageSize.height;
 
@@ -140,11 +150,68 @@
                 for (a = 0; a < data.alerts.length; a++) {
                     $('#alerts_status').text('Alert: ' + JSON.stringify(data.alerts[a]));
                 }
-                for (g = 0; g < data.gestures.length; g++) {
+
+                //loopDataGestures
+                /*var loopCount=0;
+                    setInterval(function(){
+                    for (g = 0; g < data.gestures.length; g++) {
                     $('#gestures_status').text('Gesture: ' + JSON.stringify(data.gestures[g]));
+                    $('#p1').append(JSON.stringify(data.gestures[g]));
                     gestureStatusStr = JSON.stringify(data.gestures[g].name);//My Data
                     activityMenu();
+                        }
+                    },20000);*/
+            if (flag == 1) {
+                for (g = 0; g < data.gestures.length; g++) {
+                    $('#gestures_status').text('Gesture: ' + JSON.stringify(data.gestures[0]));
+                    //$('#p1').append(JSON.stringify(data.gestures[g]));
+                    gestureStatusStr = JSON.stringify(data.gestures[0].name);//My Data
+                    var elem;
+                    /*if (gestureStatusStr == '"spreadfingers"') {
+                        //activityMenu();
+                        expandMe(elem);
+                        break;
+                    } else */
+                    if(gestureStatusStr=='"v_sign"' && menuOrder>=2){
+                        elem = $('#home' + menuOrder.toString());
+                        collapseMe(elem);
+                        $('#p1').append("BefV"+" "+menuOrder+" ");
+                        --menuOrder;
+                        $('#p1').append("AftV"+" "+menuOrder+" ");
+                        elem = $('#home' + menuOrder.toString());
+                        expandMe(elem);
+                        //activityMenu();
+                        /*for (i=0; i<100000; i++) {
+                            for (j=0; j<1000; j++) {
+
+                            }
+                        }*/
+                        gestureStatusStr="";
+                        //sense.PauseHand(true);
+                        //sleep(500);
+                        break;
+                    } else if (gestureStatusStr=='"spreadfingers"' && menuOrder<5) {
+                        elem = $('#home' + menuOrder.toString());
+                        collapseMe(elem);
+                        $('#p1').append("BefS"+" "+menuOrder +" ");
+                        menuOrder++;
+                        $('#p1').append("AftS"+" "+menuOrder+" ");
+                        elem = $('#home' + menuOrder.toString());
+                        expandMe(elem);
+                        //sleep(500);
+                        //activityMenu();
+                        /*for (i=0; i<100000; i++) {
+                            for (j=0; j<1000; j++) {
+
+                            }
+                        }*/
+                        gestureStatusStr="";
+                        //sense.PauseHand(true);
+                        break;
+                    }
                 }
+            }
+                
                 //alert(gestureStatusStr);
             }
 
@@ -175,7 +242,7 @@
                     angle += 40;
                     $('.link',$elem).stop().animate({rotate: '+=-40deg'}, 0);
                 },10);
-                    elem.stop().animate({width:'268px'}, 1000)
+                    elem.stop().animate({width:'268px'}, 300)
                     .find('.item_content').fadeIn(400,function(){
                     find('p').stop(true,true).fadeIn(600);
                 });
@@ -191,15 +258,15 @@
                     angle -= 40;
                     $('.link',$elem).stop().animate({rotate: '+=40deg'}, 0);
                 },10);
-                elem.stop().animate({width:'52px'}, 1000)
+                elem.stop().animate({width:'52px'}, 100)
                 .find('.item_content').stop(true,true).fadeOut().find('p').stop(true,true).fadeOut();
             }
 
-            function activityMenu(){
+            /*function activityMenu(){
                 var p1elem = $('#p1');
-                 p1elem.text(gestureStatusStr);
+                //p1elem.text(gestureStatusStr);
 
-                if(gestureStatusStr=='"v_sign"' && menuOrder>2){
+                /*if(gestureStatusStr=='"v_sign"' && menuOrder>2){
                     menuOrder--;
                 } else if (gestureStatusStr=='"thumb_down"' && menuOrder<5) {
                     menuOrder++;
@@ -212,7 +279,7 @@
                 } else {
                     collapseMe(elem);
                 }
-            }
+            }*/
         });
     </script>
 </head>
@@ -236,10 +303,10 @@
 
             <canvas id="myCanvas" style="border:1px solid #000000;display:none;"></canvas>
 
-            <div id="gestures_status" style="display:none;"></div>
-            <div id="alerts_status" style="display:none;"></div>
+            <div id="gestures_status" style="display:block;"></div>
+            <div id="alerts_status" style="display:block;"></div>
             <br>
-            <span style="display:none;">Status:<div id="status"></div></span>
+            <span style="display:block;">Status:<div id="status"></div></span>
         
 
     <div style="float: left;padding: 0 0 0 236px;">

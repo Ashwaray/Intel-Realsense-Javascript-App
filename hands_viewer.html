@@ -7,11 +7,7 @@
     <script type="text/javascript" src="js/promise-1.0.0.min.js"></script>
     <script type="text/javascript" src="js/realsense-3.0.js"></script>
     <script type="text/javascript" src="js/realsenseinfo-3.0.js"></script>
-     <script type="text/javascript" src="js/bjqs-1.3.min.js"></script>
-      <script type="text/javascript" src="js/bjqs-1.3.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="css/bjqs.css" type="text/css" />
-    <link rel="stylesheet" href="css/demo.css" type="text/css" />
     <script type="text/javascript">
         $(document).ready(function () {
             var sense;
@@ -212,7 +208,10 @@
                         gestureStatusStr="";
                         //sense.PauseHand(true);
                         break;
-                    }
+                    } else if (gestureStatusStr=='"thumb_up"'){
+                        goNextPrev();
+                        break;
+                    } 
                 }
             }
                 
@@ -285,6 +284,9 @@
                     collapseMe(elem);
                 }
             }*/
+
+
+
         });
     </script>
 </head>
@@ -352,13 +354,38 @@
                 </div>
             </div>
         </div>
-        <div class="clear"></div>
-        <div id="displayPage1" class="displayPageDiv" style="display:inline;">
-            this is my home page..
-        </div>
-        <div id="displayPage2" class="displayPageDiv" style="display:none;">
+        <br><br>
 
+        <div id="displayPage1" class="displayPageDiv" style="display:none;">
+            this is my home page..
+
+      </div>
+
+        <div id="displayPage2" class="displayPageDiv" style="display:block;">
+           <div id="slider">
+        <img id="button-prev" src="images/carousel/left.jpg" onclick="goNextPrev()">
+
+        <div class="slider-mask">
+        <div id="slider-content">
+            <div class="slider-img">
+                <img src="images/carousel/flamingo.jpg" alt="Flamingo" />
+                <div class="caption">Flamingo</div>
+            </div>
+            <div class="slider-img">
+                <img src="images/carousel/iguana.jpg" alt="Iguana" />
+                <div class="caption">Iguana</div>
+            </div>
+            <div class="slider-img">
+                <img src="images/carousel/lorikeet.jpg" alt="Lorikeet" />
+                <div class="caption">Lorikeet</div>
+            </div>
+            </div>
         </div>
+
+        <img id="button-next" src="images/carousel/right.jpg" onclick="goNextPrev()">
+    </div>
+        </div>
+
         <div id="displayPage3" class="displayPageDiv" style="display:none;">
 
         </div>
@@ -368,7 +395,7 @@
         <div id="displayPage5" class="displayPageDiv" style="display:none;">
 
         </div>
-       
+            
 
             <div style="position: absolute; bottom: 0px;">
             <div id="info" style="display:none;"></div>
@@ -435,6 +462,41 @@
                 $elem.stop().animate({width:'100px'}, 1000)
                 .find('.item_content').stop(true,true).fadeOut().find('p').stop(true,true).fadeOut();
             }
+        </script>
+
+        <script>
+            /*-----Image Slider---------------------*/
+   var firstImage = $('#slider-content .slider-img:first').index();
+   var lastImage = $('#slider-content .slider-img:last').index();
+
+   var currentImage = firstImage
+   var nextImage = firstImage + 1
+   var prevImage = lastImage
+
+   var sliderImages = $('#slider-content .slider-img');
+   var sliderContent = $('#slider-content');
+
+   var sliderImageWidth = parseFloat(sliderImages.eq(0).css('width'));
+
+  function goNextPrev(){
+       nextImage = currentImage == lastImage ? firstImage : currentImage + 1;
+       sliderContent.animate({ "left": -nextImage * sliderImageWidth });
+       currentImage = nextImage;
+   }
+  
+
+  /* $('#button-next').click(function() {
+       nextImage = currentImage == lastImage ? firstImage : currentImage + 1;
+       sliderContent.animate({ "left": -nextImage * sliderImageWidth });
+       currentImage = nextImage;
+       e.preventDefault();
+   });
+   $('#button-prev').click(function() {
+       prevImage = currentImage == firstImage ? lastImage : currentImage - 1;
+       sliderContent.animate({ "left": -prevImage * sliderImageWidth });
+       currentImage = prevImage;
+       e.preventDefault();
+   });*/
         </script>
 </body>
 </html>

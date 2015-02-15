@@ -14,13 +14,13 @@
     position:relative;
     background-color:#f0f0f0;
     float:right;
-    width:52px;
+    width:100px;
     margin:0px 5px;
-    height:52px;
+    height:100px;
     border:2px solid #ddd;
-    -moz-border-radius:30px;
-    -webkit-border-radius:30px;
-    border-radius:30px;
+    -moz-border-radius:52px;
+    -webkit-border-radius:52px;
+    border-radius:52px;
     -moz-box-shadow:1px 1px 3px #555;
     -webkit-box-shadow:1px 1px 3px #555;
     box-shadow:1px 1px 3px #555;
@@ -32,30 +32,30 @@
     left:2px;
     top:2px;
     position:absolute;
-    width:48px;
-    height:48px;
+    width:100px;
+    height:100px;
 }
 .icon_home{
-    background:transparent url(../images/home.png) no-repeat top left;
+    background:transparent url(../images/home1.png) no-repeat top left;
 }
 .icon_mail{
-    background:transparent url(../images/mail.png) no-repeat top left;
+    background:transparent url(../images/mail1.png) no-repeat top left;
 }
 .icon_help{
-    background:transparent url(../images/help.png) no-repeat top left;
+    background:transparent url(../images/help1.png) no-repeat top left;
 }
 .icon_find{
-    background:transparent url(../images/find.png) no-repeat top left;
+    background:transparent url(../images/find1.png) no-repeat top left;
 }
 .icon_photos{
-    background:transparent url(../images/photos.png) no-repeat top left;
+    background:transparent url(../images/photos1.png) no-repeat top left;
 }
 .item_content{
     position:absolute;
-    height:52px;
+    height:100px;
     width:220px;
     overflow:hidden;
-    left:56px;
+    left:110px;
     top:7px;
     background:transparent;
     display:none;
@@ -64,7 +64,7 @@
     color:#aaa;
     text-shadow: 1px 1px 1px #fff;
     background-color:transparent;
-    font-size:14px;
+    font-size:18px;
 }
 .item_content a{
     background-color:transparent;
@@ -74,7 +74,7 @@
     color:#bbb;
     text-shadow: 1px 1px 1px #fff;
     text-decoration:none;
-    font-size:12px;
+    font-size:14px;
 }
 .item_content a:hover{
     color:#0b965b;
@@ -84,9 +84,32 @@
     display:none;
 }
 .item_content p input{
-    border:1px solid #ccc;
-    padding:1px;
-    width:155px;
+border: 1px solid #ccc;
+padding: 5px;
+width: 109px;
+float: left;
+margin-right: 5px;
+margin-top: -5px;
+}
+
+div{
+
     float:left;
-    margin-right:5px;
+}
+
+div.displayPageDiv{
+border: 2px solid #a1a1a1;
+padding: 10px 40px;
+background: #dddddd;
+width: 900px;
+height: 350px;
+border-radius: 25px;
+margin-left: 150px;
+margin-top: 15px;
+opacity: 0.6;
+filter: alpha(opacity=60);
+}
+
+.clear {
+    clear: both;
 }
